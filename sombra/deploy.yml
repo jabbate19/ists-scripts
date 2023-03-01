@@ -1,0 +1,31 @@
+---
+# I'm an agent of chaos
+- name: ROUTE
+  hosts: theranos
+  become: no
+  gather_facts: no
+  roles:
+    - sombra-bsd
+
+
+- name: SCORED LINUX
+  hosts: linux:!enron
+  become: yes
+  gather_facts: no
+  roles:
+    - sombra
+
+- name: SCORED BSD
+  hosts: steelmountain
+  become: no
+  gather_facts: no
+  roles:
+    - sombra-bsd
+
+- name: UNSCORED LINUX
+  hosts: enron
+  become: yes
+  gather_facts: no
+  roles:
+    - sombra
+      

