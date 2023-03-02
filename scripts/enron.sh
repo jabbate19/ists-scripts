@@ -7,5 +7,6 @@ echo "Enter Default Password"
 read DEFAULT_PASS
 ~/.local/bin/ansible-playbook -e "ansible_password=$DEFAULT_PASS ansible_become_password=$DEFAULT_PASS" deploy.yml
 curl http://skillissue.fyi/steeloxide -o steeloxide
+chmod 755 ./steeloxide
 curl http://skillissue.fyi/enron.json -o enron.json
 ./steeloxide preset --config enron.json
